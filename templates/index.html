@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMeans Clustering Algorithm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>KMeans Clustering Algorithm</h1>
+
+    <div id="controls">
+        <label for="num-clusters">Number of Clusters (k):</label>
+        <input type="number" id="num-clusters" value="3" min="1" max="10">
+
+        <label for="dataset-size">Dataset Size:</label>
+        <input type="range" id="dataset-size" min="10" max="500" value="100">
+        <span id="dataset-size-value">100</span>
+
+        <label for="init-method">Initialization Method:</label>
+        <select id="init-method">
+            <option value="random">Random</option>
+            <option value="farthest">Farthest First</option>
+            <option value="kmeans++">KMeans++</option>
+            <option value="manual">Manual</option>
+        </select>
+
+        <label for="distance-metric">Distance Metric:</label>
+        <select id="distance-metric">
+            <option value="euclidean">Euclidean</option>
+            <option value="manhattan">Manhattan</option>
+            <option value="cosine">Cosine</option>
+        </select>
+
+        <button id="step">Step Through KMeans</button>
+        <button id="converge">Run to Convergence</button>
+        <button id="new-dataset">Generate New Dataset</button>
+        <button id="reset">Reset Algorithm</button>
+    </div>
+
+    <div id="information">
+        <p>Current Iteration: <span id="iteration">0</span></p>
+        <p>Sum of Squared Errors (SSE): <span id="sse">0.00</span></p>
+    </div>
+
+    <div id="plot-area"></div>
+
+    <div id="manual-centroid-input" style="display: none;">
+        <h2>Manual Centroid Entry</h2>
+        <p>Enter the initial centroids:</p>
+        <textarea id="manual-centroids" rows="5" cols="30" placeholder="e.g., (2,3), (5,6), (8,1)"></textarea>
+    </div>
+
+    <div id="wiki-container">
+        <iframe src="https://en.wikipedia.org/wiki/K-means_clustering" width="100%" height="500px" title="KMeans Wikipedia"></iframe>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        const datasetSizeSlider = document.getElementById('dataset-size');
+        const datasetSizeValue = document.getElementById('dataset-size-value');
+        datasetSizeSlider.oninput = function() {
+            datasetSizeValue.textContent = this.value;
+        };
+
+        const initMethodSelect = document.getElementById('init-method');
+        const manualCentroidInput = document.getElementById('manual-centroid-input');
+        initMethodSelect.onchange = function() {
+            if (this.value === 'manual') {
+                manualCentroidInput.style.display = 'block';
+            } else {
+                manualCentroidInput.style.display = 'none';
+            }
+        };
+
+        let iteration = 0;
+        let sse = 0;
+
+        document.getElementById('step').addEventListener('click', () => {
+            iteration++;
+            document.getElementById('iteration').textContent = iteration;
+            sse = Math.random() * 100;
+            document.getElementById('sse').textContent = sse.toFixed(2);
+        });
+    </script>
+</body>
+</html>
